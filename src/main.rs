@@ -1,4 +1,5 @@
 use std::rc;
+use std::process::exit;
 
 use slint::Model;
 
@@ -41,6 +42,7 @@ fn main() -> Result<(), slint::PlatformError> {
             board = [[0; 3]; 3];
             ui.set_playerTurn(true);
             //set all images to the original state
+            exit(1);
             return true;
         } else if finished.contains(&8){
             let ui = ui_handle.upgrade().unwrap();
@@ -48,6 +50,7 @@ fn main() -> Result<(), slint::PlatformError> {
             ui.set_squares(square_model.clone().into());
             board = [[0; 3]; 3];
             ui.set_playerTurn(true);
+            exit(1);
             return true;
         } else if finished.contains(&0){
             // if not yet finished do nothing
@@ -59,6 +62,7 @@ fn main() -> Result<(), slint::PlatformError> {
             ui.set_squares(square_model.clone().into());
             board = [[0; 3]; 3];
             ui.set_playerTurn(true);
+            exit(1);
             return true;
         }
     });
