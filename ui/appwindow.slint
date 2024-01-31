@@ -1,0 +1,77 @@
+import { Button, VerticalBox , GridBox} from "std-widgets.slint";
+
+
+struct squareData {
+    image: image,
+    alreadyClicked: bool,
+}
+
+export component square inherits Rectangle {
+    callback clicked(bool);
+    in property <bool> alreadyClicked;
+    in property <image> icon;
+
+    height: 64px;
+    width: 64px;
+    background: alreadyClicked ? #34CE57 : #3960D5;
+
+    Image {
+        source: icon;
+        width: parent.width;
+        height: parent.height;
+    }
+
+    TouchArea {
+        clicked => {
+            root.clicked(alreadyClicked);
+        }
+    }
+}
+
+
+export component AppWindow inherits Window {
+    //tic-tac-toe slint interface
+    width: 192px;
+    height: 192px;
+
+    in-out property <bool> playerTurn;
+    property <bool> game_over: false;
+    callback check_if_game_over(int, bool) -> bool;
+
+
+    in property <[squareData]> squares: [
+        {image: @image-url("icons/empty.png")},
+        {image: @image-url("icons/empty.png")},
+        {image: @image-url("icons/empty.png")},
+        {image: @image-url("icons/empty.png")},
+        {image: @image-url("icons/empty.png")},
+        {image: @image-url("icons/empty.png")},
+        {image: @image-url("icons/empty.png")},
+        {image: @image-url("icons/empty.png")},
+        {image: @image-url("icons/empty.png")},
+    ];
+
+
+    // Create 9 instances of the square component
+    for tile[i] in squares : square {
+        icon: tile.image;
+        x: mod(i, 3) * 64px;
+        y: floor(i / 3) * 64px;
+        width: 64px;
+        height: 64px;
+        alreadyClicked: tile.alreadyClicked;
+
+        clicked => {
+            if (tile.alreadyClicked == false) {
+                tile.alreadyClicked = true;
+                self.icon = playerTurn? @image-url("icons/cross.png") : @image-url("icons/circle.png");
+                game_over = root.check_if_game_over(i, playerTurn);
+                if (root.game_over){
+                    //reset the game
+                }
+                playerTurn = !playerTurn;
+            }
+        }
+    }
+
+}
