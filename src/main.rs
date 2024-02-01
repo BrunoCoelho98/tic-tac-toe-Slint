@@ -1,4 +1,4 @@
-use slint::PlatformError;
+#![windows_subsystem = "windows"] // Comment this line out if you are not using windows
 
 
 use slint::Model;
@@ -11,6 +11,8 @@ pub fn reset_game(ui: &AppWindow) {
     ui.set_squares(square_model.clone().into());
 }
 
+
+//Comment this line out if you are not using wasm
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen::prelude::wasm_bindgen(start))]
 pub fn main() {
     let ui = AppWindow::new().unwrap();
