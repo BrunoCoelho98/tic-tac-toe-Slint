@@ -62,7 +62,7 @@ export component AppWindow inherits Window {
 
         clicked => {
             if (self.alreadyClicked == false) {
-                self.icon = playerTurn? @image-url("icons/cross.png") : @image-url("icons/circle.png");
+                self.icon = playerTurn? @image-url("icons/circle.png") : @image-url("icons/cross.png");
                 game_over = root.check_if_game_over(i, playerTurn);
                 if (game_over){
                     //reset the game
