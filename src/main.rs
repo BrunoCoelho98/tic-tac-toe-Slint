@@ -54,7 +54,6 @@ fn main() -> Result<(), slint::PlatformError> {
             return true;
         } else if finished.contains(&0){
             // if not yet finished do nothing
-            let ui = ui_handle.upgrade().unwrap();
             return false;
         } else {
             // if it is a draw reset the game
