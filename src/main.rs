@@ -1,9 +1,14 @@
-use std::rc;
-use std::process::exit;
+
 
 use slint::Model;
 
 slint::include_modules!();
+
+fn reset_game(ui: &AppWindow) {
+    let squares: Vec<squareData> = ui.get_squares().iter().collect();
+    let square_model = std::rc::Rc::new(slint::VecModel::from(squares));
+    ui.set_squares(square_model.clone().into());
+}
 
 fn main() -> Result<(), slint::PlatformError> {
     let ui = AppWindow::new().unwrap();
@@ -38,19 +43,14 @@ fn main() -> Result<(), slint::PlatformError> {
         if finished.contains(&1){
             // if X win reset the game
             let ui = ui_handle.upgrade().unwrap();
-            ui.set_squares(square_model.clone().into());
+            reset_game(&ui);
             board = [[0; 3]; 3];
-            ui.set_playerTurn(true);
-            //set all images to the original state
-            exit(1);
             return true;
         } else if finished.contains(&8){
             let ui = ui_handle.upgrade().unwrap();
             // if O win reset the game
-            ui.set_squares(square_model.clone().into());
+            reset_game(&ui);
             board = [[0; 3]; 3];
-            ui.set_playerTurn(true);
-            exit(1);
             return true;
         } else if finished.contains(&0){
             // if not yet finished do nothing
@@ -59,10 +59,8 @@ fn main() -> Result<(), slint::PlatformError> {
         } else {
             // if it is a draw reset the game
             let ui = ui_handle.upgrade().unwrap();
-            ui.set_squares(square_model.clone().into());
+            reset_game(&ui);
             board = [[0; 3]; 3];
-            ui.set_playerTurn(true);
-            exit(1);
             return true;
         }
     });

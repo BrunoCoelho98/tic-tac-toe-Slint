@@ -3,13 +3,13 @@ import { Button, VerticalBox , GridBox} from "std-widgets.slint";
 
 struct squareData {
     image: image,
-    alreadyClicked: bool,
 }
 
 export component square inherits Rectangle {
     callback clicked(bool);
-    in property <bool> alreadyClicked;
+    in-out property <bool> alreadyClicked: false;
     in property <image> icon;
+    in-out property <bool> game_over: false;
 
     height: 64px;
     width: 64px;
@@ -35,43 +35,51 @@ export component AppWindow inherits Window {
     height: 192px;
 
     in-out property <bool> playerTurn;
-    property <bool> game_over: false;
+    in-out property <bool> game_over;
     callback check_if_game_over(int, bool) -> bool;
 
-
-    in property <[squareData]> squares: [
-        {image: @image-url("icons/empty.png")},
-        {image: @image-url("icons/empty.png")},
-        {image: @image-url("icons/empty.png")},
-        {image: @image-url("icons/empty.png")},
-        {image: @image-url("icons/empty.png")},
-        {image: @image-url("icons/empty.png")},
-        {image: @image-url("icons/empty.png")},
-        {image: @image-url("icons/empty.png")},
-        {image: @image-url("icons/empty.png")},
+    in-out property <[squareData]> squares: [
+        {image: @image-url("icons/empty.png"), alreadyClicked: false},
+        {image: @image-url("icons/empty.png"), alreadyClicked: false},
+        {image: @image-url("icons/empty.png"), alreadyClicked: false},
+        {image: @image-url("icons/empty.png"), alreadyClicked: false},
+        {image: @image-url("icons/empty.png"), alreadyClicked: false},
+        {image: @image-url("icons/empty.png"), alreadyClicked: false},
+        {image: @image-url("icons/empty.png"), alreadyClicked: false},
+        {image: @image-url("icons/empty.png"), alreadyClicked: false},
+        {image: @image-url("icons/empty.png"), alreadyClicked: false},
     ];
 
 
     // Create 9 instances of the square component
     for tile[i] in squares : square {
-        icon: tile.image;
+        icon: self.game_over? @image-url("icons/empty.png") : tile.image;
         x: mod(i, 3) * 64px;
         y: floor(i / 3) * 64px;
         width: 64px;
         height: 64px;
-        alreadyClicked: tile.alreadyClicked;
+
 
         clicked => {
-            if (tile.alreadyClicked == false) {
-                tile.alreadyClicked = true;
+            if (self.alreadyClicked == false) {
                 self.icon = playerTurn? @image-url("icons/cross.png") : @image-url("icons/circle.png");
                 game_over = root.check_if_game_over(i, playerTurn);
-                if (root.game_over){
+                if (game_over){
                     //reset the game
+                    self.alreadyClicked = false;
+                    debug("Already Clicked:", self.alreadyClicked);
+                    debug("Game Over:", game_over);
+                    playerTurn = false; // or set it to the initial player's turn
+                } else {
+                    self.alreadyClicked = true;
+                    debug("Already Clicked:", self.alreadyClicked);
+                    debug("Game Over:", game_over);
+                    playerTurn = !playerTurn;
+                
                 }
-                playerTurn = !playerTurn;
+
             }
         }
     }
-
+    
 }
