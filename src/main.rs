@@ -1,16 +1,18 @@
+use slint::PlatformError;
 
 
 use slint::Model;
 
 slint::include_modules!();
 
-fn reset_game(ui: &AppWindow) {
+pub fn reset_game(ui: &AppWindow) {
     let squares: Vec<squareData> = ui.get_squares().iter().collect();
     let square_model = std::rc::Rc::new(slint::VecModel::from(squares));
     ui.set_squares(square_model.clone().into());
 }
 
-fn main() -> Result<(), slint::PlatformError> {
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen::prelude::wasm_bindgen(start))]
+pub fn main() {
     let ui = AppWindow::new().unwrap();
     let ui_handle: slint::Weak<AppWindow> = ui.as_weak();
 
@@ -64,5 +66,5 @@ fn main() -> Result<(), slint::PlatformError> {
         }
     });
 
-    ui.run()
+    ui.run().unwrap();
 }
