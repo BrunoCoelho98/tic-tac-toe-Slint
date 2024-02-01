@@ -67,13 +67,9 @@ export component AppWindow inherits Window {
                 if (game_over){
                     //reset the game
                     self.alreadyClicked = false;
-                    debug("Already Clicked:", self.alreadyClicked);
-                    debug("Game Over:", game_over);
                     playerTurn = false; // or set it to the initial player's turn
                 } else {
                     self.alreadyClicked = true;
-                    debug("Already Clicked:", self.alreadyClicked);
-                    debug("Game Over:", game_over);
                     playerTurn = !playerTurn;
                 
                 }
