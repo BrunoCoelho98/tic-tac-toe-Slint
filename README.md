@@ -17,15 +17,12 @@ A This project implements a simple Tic-Tac-Toe game using Slint for the UI and R
 
 Clone the repository
    
-    ```
     git clone https://github.com/BrunoCoelho98/tic-tac-toe-Slint.git
       cd tic-tac-toe-Slint
-    ```
 ## Build and Run
 
-     ```
      cargo run
-     ```
+     
 Or you can just acess the WebAssembly version: https://brunocoelho98.github.io/tic-tac-toe-Slint/
 
 
